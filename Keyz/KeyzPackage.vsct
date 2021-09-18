@@ -23,7 +23,17 @@
   <!--The Commands section is where commands, menus, and menu groups are defined.
       This section uses a Guid to identify the package that provides the command defined inside it. -->
   <Commands package="guidKeyzPackage">
-    <!-- Inside this section we have different sub-sections: one for the menus, another
+	<Menus>
+		<Menu guid="guidKeyzPackageCmdSet" id="SubMenu" priority="0x0100" type="Menu">
+			<Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS"/>
+			<Strings>
+				<ButtonText>KeyZ</ButtonText>
+				<CommandName>KeyZ</CommandName>
+			</Strings>
+		</Menu>
+	</Menus>
+
+	  <!-- Inside this section we have different sub-sections: one for the menus, another
     for the menu groups, one for the buttons (the actual commands), one for the combos
     and the last one for the bitmaps used. Each element is identified by a command id that
     is a unique pair of guid and numeric identifier; the guid part of the identifier is usually
@@ -39,6 +49,9 @@
       <Group guid="guidKeyzPackageCmdSet" id="MyMenuGroup" priority="0x0600">
         <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />
       </Group>
+	  <Group guid="guidKeyzPackageCmdSet" id="SubMenuGroup" priority="0x0000">
+		<Parent guid="guidKeyzPackageCmdSet" id="SubMenu"/>
+      </Group>
     </Groups>
 
     <!--Buttons section. -->
@@ -53,17 +66,17 @@
               <CommandFlag>DynamicVisibility</CommandFlag>
           If you do not want an image next to your command, remove the Icon node /> -->
       <Button guid="guidKeyzPackageCmdSet" id="OpenOutputCommandId" priority="0x0100" type="Button">
-        <Parent guid="guidKeyzPackageCmdSet" id="MyMenuGroup" />
+        <Parent guid="guidKeyzPackageCmdSet" id="SubMenuGroup" />
         <Icon guid="guidImages" id="bmpPic1" />
         <Strings>
-          <ButtonText>Invoke Open Output Folder</ButtonText>
+          <ButtonText>Open Output Folder</ButtonText>
         </Strings>
       </Button>
       <Button guid="guidKeyzPackageCmdSet" id="cmdidOpenSolutionFolder" priority="0x0100" type="Button">
-        <Parent guid="guidKeyzPackageCmdSet" id="MyMenuGroup" />
+        <Parent guid="guidKeyzPackageCmdSet" id="SubMenuGroup" />
         <Icon guid="guidImages1" id="bmpPic1" />
         <Strings>
-          <ButtonText>Invoke Open Solution Folder</ButtonText>
+          <ButtonText>Open Solution Folder</ButtonText>
         </Strings>
       </Button>
     </Buttons>
@@ -79,7 +92,12 @@
       <Bitmap guid="guidImages1" href="Resources\OpenSolutionFolder.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
     </Bitmaps>
   </Commands>
-
+  <KeyBindings>
+	<KeyBinding guid="guidKeyzPackageCmdSet" id="OpenOutputCommandId"
+		key1="K" key2="O" mod1="Control" mod2="Control" editor="guidVSStd97" />
+	  <KeyBinding guid="guidKeyzPackageCmdSet" id="cmdidOpenSolutionFolder"
+	  key1="K" key2="O" mod1="Control Shift" mod2="Control Shift" editor="guidVSStd97" />
+  </KeyBindings>
   <Symbols>
     <!-- This is the package guid. -->
     <GuidSymbol name="guidKeyzPackage" value="{574fe2f0-46e3-4f55-aaaf-06ea0262e775}" />
@@ -89,6 +107,8 @@
       <IDSymbol name="MyMenuGroup" value="0x1020" />
       <IDSymbol name="OpenOutputCommandId" value="0x0100" />
       <IDSymbol value="4129" name="cmdidOpenSolutionFolder" />
+   	  <IDSymbol name="SubMenu" value="0x1100"/>
+	  <IDSymbol name="SubMenuGroup" value="0x1150"/>
     </GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{22949771-f2f0-427d-902b-1d6ea6fc345a}">
