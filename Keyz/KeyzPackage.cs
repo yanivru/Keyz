@@ -1,5 +1,8 @@
-﻿using Microsoft.VisualStudio.Shell;
+﻿using EnvDTE;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using System;
+using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Task = System.Threading.Tasks.Task;
@@ -46,9 +49,18 @@ namespace Keyz
         {
             // When initialized asynchronously, the current thread may be a background thread at this point.
             // Do any initialization that requires the UI thread after switching to the UI thread.
-            await this.JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
-            await OpenOutputCommand.InitializeAsync(this);
-            await OpenSolutionFolderCommand.InitializeAsync(this);
+            await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+
+            OleMenuCommandService commandService = await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
+            DTE dte = (DTE)await GetServiceAsync(typeof(DTE));
+            
+            var a = await GetServiceAsync(typeof(SVsActivityLog));
+            IVsActivityLog activityLog = a as IVsActivityLog;
+
+            var shell = new Shell();
+
+            await OpenOutputCommand.InitializeAsync(this, shell, new StartupProjectProvider(dte, activityLog));
+            await OpenSolutionFolderCommand.InitializeAsync(this, dte, shell);
         }
 
         #endregion

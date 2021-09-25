@@ -76,16 +76,15 @@ namespace Keyz
         /// Initializes the singleton instance of the command.
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
-        public static async Task InitializeAsync(AsyncPackage package)
+        public static async Task InitializeAsync(AsyncPackage package, DTE dte, Shell shell)
         {
             // Switch to the main thread - the call to AddCommand in OpenSolutionFolder's constructor requires
             // the UI thread.
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
             OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-            DTE dte = (DTE)await package.GetServiceAsync(typeof(DTE));
 
-            Instance = new OpenSolutionFolderCommand(package, commandService, dte, new Shell());
+            Instance = new OpenSolutionFolderCommand(package, commandService, dte, shell);
         }
 
         /// <summary>

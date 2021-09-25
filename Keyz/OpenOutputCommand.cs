@@ -75,16 +75,15 @@ namespace Keyz
         /// Initializes the singleton instance of the command.
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
-        public static async Task InitializeAsync(AsyncPackage package)
+        public static async Task InitializeAsync(AsyncPackage package, Shell shell, StartupProjectProvider startupProjectProvider)
         {
             // Switch to the main thread - the call to AddCommand in OpenOutputCommand's constructor requires
             // the UI thread.
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
             OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-            DTE dte = (DTE)await package.GetServiceAsync(typeof(DTE));
 
-            Instance = new OpenOutputCommand(package, commandService, new Shell(), new StartupProjectProvider(dte));
+            Instance = new OpenOutputCommand(package, commandService, shell, startupProjectProvider);
         }
 
         /// <summary>
