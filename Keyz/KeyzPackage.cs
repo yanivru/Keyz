@@ -3,6 +3,9 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using System;
 using System.ComponentModel.Design;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Task = System.Threading.Tasks.Task;
@@ -53,9 +56,28 @@ namespace Keyz
 
             OleMenuCommandService commandService = await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
             DTE dte = (DTE)await GetServiceAsync(typeof(DTE));
-            
-            var a = await GetServiceAsync(typeof(SVsActivityLog));
-            IVsActivityLog activityLog = a as IVsActivityLog;
+            //object b = dte.GetObject("Microsoft.VisualStudio.TeamFoundation.VersionControl.VersionControlExt");
+            //object sw = b.GetType().GetProperty("SolutionWorkspace").GetValue(b);
+            //var w = (Type)sw.GetType();
+            //var versionSpec = w.Assembly.GetType("Microsoft.TeamFoundation.VersionControl.Client.VersionSpec");
+            //var latest = versionSpec.GetProperty("Latest");
+            //var recursion = w.Assembly.GetType("Microsoft.TeamFoundation.VersionControl.Client.RecursionType");
+            //var enums = (Array)recursion.GetEnumValues();
+            //var getOptions = w.Assembly.GetType("Microsoft.TeamFoundation.VersionControl.Client.GetOptions");
+            //var enumValues = (Array)getOptions.GetEnumValues();
+
+            //var dir = Path.GetDirectoryName(dte.Solution.FullName);
+
+            //string[] dirs = { dir };
+
+            //var get = w.GetMethod("Get", BindingFlags.Public | BindingFlags.Instance, null, new Type[] {typeof(string[]), versionSpec, enums.GetValue(2).GetType(), enumValues.GetValue(0).GetType() }, null);
+
+            //var l = latest.GetValue(sw);
+            //var o = get.Invoke(sw, BindingFlags.Public | BindingFlags.Instance, null, new[] { dirs, l, enums.GetValue(2), enumValues.GetValue(0) }, CultureInfo.InvariantCulture);
+
+
+            //var c = b.SolutionWorkspace.Get(new string[]{ dte.Solution.FullName }, VersionSpec.Latest, RecursionType.Full, GetOptions.None);
+            IVsActivityLog activityLog = await GetServiceAsync(typeof(SVsActivityLog)) as IVsActivityLog;
 
             var shell = new Shell();
 
