@@ -54,35 +54,14 @@ namespace Keyz
             // Do any initialization that requires the UI thread after switching to the UI thread.
             await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
 
-            OleMenuCommandService commandService = await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
             DTE dte = (DTE)await GetServiceAsync(typeof(DTE));
-            //object b = dte.GetObject("Microsoft.VisualStudio.TeamFoundation.VersionControl.VersionControlExt");
-            //object sw = b.GetType().GetProperty("SolutionWorkspace").GetValue(b);
-            //var w = (Type)sw.GetType();
-            //var versionSpec = w.Assembly.GetType("Microsoft.TeamFoundation.VersionControl.Client.VersionSpec");
-            //var latest = versionSpec.GetProperty("Latest");
-            //var recursion = w.Assembly.GetType("Microsoft.TeamFoundation.VersionControl.Client.RecursionType");
-            //var enums = (Array)recursion.GetEnumValues();
-            //var getOptions = w.Assembly.GetType("Microsoft.TeamFoundation.VersionControl.Client.GetOptions");
-            //var enumValues = (Array)getOptions.GetEnumValues();
-
-            //var dir = Path.GetDirectoryName(dte.Solution.FullName);
-
-            //string[] dirs = { dir };
-
-            //var get = w.GetMethod("Get", BindingFlags.Public | BindingFlags.Instance, null, new Type[] {typeof(string[]), versionSpec, enums.GetValue(2).GetType(), enumValues.GetValue(0).GetType() }, null);
-
-            //var l = latest.GetValue(sw);
-            //var o = get.Invoke(sw, BindingFlags.Public | BindingFlags.Instance, null, new[] { dirs, l, enums.GetValue(2), enumValues.GetValue(0) }, CultureInfo.InvariantCulture);
-
-
-            //var c = b.SolutionWorkspace.Get(new string[]{ dte.Solution.FullName }, VersionSpec.Latest, RecursionType.Full, GetOptions.None);
             IVsActivityLog activityLog = await GetServiceAsync(typeof(SVsActivityLog)) as IVsActivityLog;
 
             var shell = new Shell();
 
             await OpenOutputCommand.InitializeAsync(this, shell, new StartupProjectProvider(dte, activityLog));
             await OpenSolutionFolderCommand.InitializeAsync(this, dte, shell);
+            await TfsGetLatestCommand.InitializeAsync(this, new TfsService(dte));
         }
 
         #endregion
