@@ -101,11 +101,11 @@
 	</Commands>
 	<KeyBindings>
 		<KeyBinding guid="guidKeyzPackageCmdSet" id="OpenOutputCommandId"
-			key1="Z" key2="O" mod1="Control" mod2="Control" editor="guidVSStd97" />
+			key1="K" key2="O" mod1="Control" mod2="Control" editor="guidVSStd97" />
 		<KeyBinding guid="guidKeyzPackageCmdSet" id="cmdidOpenSolutionFolder"
-		key1="Z" key2="O" mod1="Control Shift" mod2="Control Shift" editor="guidVSStd97" />
+		key1="K" key2="O" mod1="Control Shift" mod2="Control Shift" editor="guidVSStd97" />
 		<KeyBinding guid="guidKeyzPackageCmdSet" id="cmdidTfsGetLatestForSolution"
-		key1="Z" key2="G" mod1="Control" mod2="Control" editor="guidVSStd97" />
+		key1="K" key2="J" mod1="Control" mod2="Control" editor="guidVSStd97" />
 	</KeyBindings>
 	<Symbols>
 		<!-- This is the package guid. -->
