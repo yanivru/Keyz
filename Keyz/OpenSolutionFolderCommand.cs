@@ -32,6 +32,7 @@ namespace Keyz
         private readonly AsyncPackage package;
         private DTE _dte;
         private readonly Shell _shell;
+        private readonly OutputWindowLogger _outputLogger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenSolutionFolderCommand"/> class.
@@ -39,7 +40,7 @@ namespace Keyz
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
         /// <param name="commandService">Command service to add command to, not null.</param>
-        private OpenSolutionFolderCommand(AsyncPackage package, OleMenuCommandService commandService, DTE dte, Shell shell)
+        private OpenSolutionFolderCommand(AsyncPackage package, OleMenuCommandService commandService, DTE dte, Shell shell, OutputWindowLogger outputLogger)
         {
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -50,6 +51,7 @@ namespace Keyz
 
             _dte = dte;
             _shell = shell;
+            _outputLogger = outputLogger;
         }
 
         /// <summary>
@@ -68,7 +70,7 @@ namespace Keyz
         {
             get
             {
-                return this.package;
+                return package;
             }
         }
 
@@ -76,7 +78,7 @@ namespace Keyz
         /// Initializes the singleton instance of the command.
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
-        public static async Task InitializeAsync(AsyncPackage package, DTE dte, Shell shell)
+        public static async Task InitializeAsync(AsyncPackage package, DTE dte, Shell shell, OutputWindowLogger outputLogger)
         {
             // Switch to the main thread - the call to AddCommand in OpenSolutionFolder's constructor requires
             // the UI thread.
@@ -84,7 +86,7 @@ namespace Keyz
 
             OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
 
-            Instance = new OpenSolutionFolderCommand(package, commandService, dte, shell);
+            Instance = new OpenSolutionFolderCommand(package, commandService, dte, shell, outputLogger);
         }
 
         /// <summary>
@@ -98,7 +100,18 @@ namespace Keyz
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            string solutionDir = System.IO.Path.GetDirectoryName(_dte.Solution.FullName);
+            if(_dte.Solution == null)
+            {
+                _outputLogger.Write("No open solution");
+            }
+
+            var solutionPath = _dte.Solution?.FullName;
+            if(string.IsNullOrEmpty(solutionPath))
+            {
+                _outputLogger.Write("No open solution");
+                return;
+            }
+            string solutionDir = Path.GetDirectoryName(solutionPath);
 
             _shell.OpenFolder(solutionDir);
         }

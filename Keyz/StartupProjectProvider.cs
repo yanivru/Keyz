@@ -20,10 +20,10 @@ namespace Keyz
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
-            var startupProjects = (Array)_dte.Solution.SolutionBuild.StartupProjects;
+            var startupProjects = (Array)_dte.Solution?.SolutionBuild?.StartupProjects;
 
-            _log.LogEntry((uint)__ACTIVITYLOG_ENTRYTYPE.ALE_INFORMATION, "KeyZ", $"# of startup projects {startupProjects.Length}");
-            if (startupProjects.Length > 0)
+            _log.LogEntry((uint)__ACTIVITYLOG_ENTRYTYPE.ALE_INFORMATION, "KeyZ", $"# of startup projects {startupProjects?.Length}");
+            if (startupProjects?.Length > 0)
             {
                 foreach (Project project in _dte.Solution.Projects)
                 {

@@ -32,6 +32,7 @@ namespace Keyz
         private readonly AsyncPackage package;
         private readonly Shell _shell;
         private readonly StartupProjectProvider _startupProjectProvider;
+        private readonly OutputWindowLogger _outputLogger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OpenOutputCommand"/> class.
@@ -39,10 +40,11 @@ namespace Keyz
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
         /// <param name="commandService">Command service to add command to, not null.</param>
-        private OpenOutputCommand(AsyncPackage package, OleMenuCommandService commandService, Shell shell, StartupProjectProvider startupProjectProvider)
+        private OpenOutputCommand(AsyncPackage package, OleMenuCommandService commandService, Shell shell, StartupProjectProvider startupProjectProvider, OutputWindowLogger outputLogger)
         {
             _shell = shell;
             _startupProjectProvider = startupProjectProvider;
+            _outputLogger = outputLogger;
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
 
@@ -75,7 +77,7 @@ namespace Keyz
         /// Initializes the singleton instance of the command.
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
-        public static async Task InitializeAsync(AsyncPackage package, Shell shell, StartupProjectProvider startupProjectProvider)
+        public static async Task InitializeAsync(AsyncPackage package, Shell shell, StartupProjectProvider startupProjectProvider, OutputWindowLogger outputLogger)
         {
             // Switch to the main thread - the call to AddCommand in OpenOutputCommand's constructor requires
             // the UI thread.
@@ -83,7 +85,7 @@ namespace Keyz
 
             OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
 
-            Instance = new OpenOutputCommand(package, commandService, shell, startupProjectProvider);
+            Instance = new OpenOutputCommand(package, commandService, shell, startupProjectProvider, outputLogger);
         }
 
         /// <summary>
@@ -102,6 +104,10 @@ namespace Keyz
             {
                 var projectDir = Path.GetDirectoryName(project.FileName);
                 _shell.OpenFolder(projectDir);
+            }
+            else
+            {
+                _outputLogger.Write("Coun't find startup project");
             }
         }
     }

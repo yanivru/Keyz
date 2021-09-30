@@ -59,9 +59,11 @@ namespace Keyz
 
             var shell = new Shell();
 
-            await OpenOutputCommand.InitializeAsync(this, shell, new StartupProjectProvider(dte, activityLog));
-            await OpenSolutionFolderCommand.InitializeAsync(this, dte, shell);
-            await TfsGetLatestCommand.InitializeAsync(this, new TfsService(dte));
+            var outputWindowLogger = new OutputWindowLogger();
+
+            await OpenOutputCommand.InitializeAsync(this, shell, new StartupProjectProvider(dte, activityLog), outputWindowLogger);
+            await OpenSolutionFolderCommand.InitializeAsync(this, dte, shell, outputWindowLogger);
+            await TfsGetLatestCommand.InitializeAsync(this, new TfsService(dte, outputWindowLogger), outputWindowLogger);
         }
 
         #endregion

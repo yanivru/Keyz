@@ -8,16 +8,18 @@ using System.Reflection;
 
 namespace Keyz
 {
-    public class TfsService
+    internal class TfsService
     {
         private DTE _dte;
+        private readonly OutputWindowLogger _outputLogger;
 
-        public TfsService(DTE dte)
+        public TfsService(DTE dte, OutputWindowLogger outputLogger)
         {
             _dte = dte;
+            _outputLogger = outputLogger;
         }
 
-        internal void GetLatestForSoltution()
+        internal object GetLatestForSoltution()
         {
             ThreadHelper.ThrowIfNotOnUIThread();
 
@@ -26,7 +28,8 @@ namespace Keyz
             object solutionWorkspace = GetSolutionWorkspace();
             if (solutionWorkspace == null)
             {
-                return;
+                _outputLogger.Write("No solution workspace");
+                return null;
             }
 
             var solutionWorkspaceType = solutionWorkspace.GetType();
@@ -39,7 +42,7 @@ namespace Keyz
 
             var solutionDirectory = Path.GetDirectoryName(_dte.Solution.FullName);
 
-            InvokeMethodDynamically(solutionWorkspace, "Get", new string[]{ solutionDirectory}, latestVersion, recursionFull, getOptionsNone);
+            return InvokeMethodDynamically(solutionWorkspace, "Get", new string[]{ solutionDirectory}, latestVersion, recursionFull, getOptionsNone);
         }
 
         private object InvokeMethodDynamically(object targetObject, string methodName, params object[] parameters)

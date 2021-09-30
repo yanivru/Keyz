@@ -35,9 +35,10 @@ namespace Keyz
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
         /// <param name="commandService">Command service to add command to, not null.</param>
-        private TfsGetLatestCommand(AsyncPackage package, OleMenuCommandService commandService, TfsService tfsService)
+        private TfsGetLatestCommand(AsyncPackage package, OleMenuCommandService commandService, TfsService tfsService, OutputWindowLogger outputLogger)
         {
             _tfsService = tfsService;
+            _outputLogger = outputLogger;
 
             this.package = package ?? throw new ArgumentNullException(nameof(package));
             commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
@@ -57,6 +58,7 @@ namespace Keyz
         }
 
         private readonly TfsService _tfsService;
+        private readonly OutputWindowLogger _outputLogger;
 
         /// <summary>
         /// Gets the service provider from the owner package.
@@ -73,14 +75,14 @@ namespace Keyz
         /// Initializes the singleton instance of the command.
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
-        public static async Task InitializeAsync(AsyncPackage package, TfsService tfsService)
+        public static async Task InitializeAsync(AsyncPackage package, TfsService tfsService, OutputWindowLogger outputLogger)
         {
             // Switch to the main thread - the call to AddCommand in TfsGetLatestCommand's constructor requires
             // the UI thread.
             await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync(package.DisposalToken);
 
             OleMenuCommandService commandService = await package.GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
-            Instance = new TfsGetLatestCommand(package, commandService, tfsService);
+            Instance = new TfsGetLatestCommand(package, commandService, tfsService, outputLogger);
         }
 
         /// <summary>
@@ -93,7 +95,8 @@ namespace Keyz
         private void Execute(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            _tfsService.GetLatestForSoltution();
+            var status = _tfsService.GetLatestForSoltution();
+            _outputLogger.Write("Get status: " + status?.ToString());
         }
     }
 }
