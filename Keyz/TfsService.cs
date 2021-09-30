@@ -28,7 +28,7 @@ namespace Keyz
             object solutionWorkspace = GetSolutionWorkspace();
             if (solutionWorkspace == null)
             {
-                _outputLogger.Write("No solution workspace");
+                _outputLogger.Write("No solution workspace", true);
                 return null;
             }
 

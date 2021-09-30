@@ -107,7 +107,7 @@ namespace Keyz
             }
             else
             {
-                _outputLogger.Write("Coun't find startup project");
+                _outputLogger.Write("Coun't find startup project", true);
             }
         }
     }

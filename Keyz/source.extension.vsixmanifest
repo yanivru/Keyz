@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="Keyz.26134066-ee40-4090-b8f7-8994b2f316ce" Version="1.0.6" Language="en-US" Publisher="Yaniv ru" />
+        <Identity Id="Keyz.26134066-ee40-4090-b8f7-8994b2f316ce" Version="1.0.7" Language="en-US" Publisher="Yaniv ru" />
         <DisplayName>Keyz</DisplayName>
-        <Description xml:space="preserve">Adds command (&amp; shorcut </Description>
+        <Description xml:space="preserve">Adds command and shortcuts for common operations</Description>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[16.0, 17.0)" />

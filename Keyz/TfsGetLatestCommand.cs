@@ -95,8 +95,24 @@ namespace Keyz
         private void Execute(object sender, EventArgs e)
         {
             ThreadHelper.ThrowIfNotOnUIThread();
-            var status = _tfsService.GetLatestForSoltution();
-            _outputLogger.Write("Get status: " + status?.ToString());
+            dynamic status = _tfsService.GetLatestForSoltution();
+            if (status == null)
+            {
+                _outputLogger.Write("No status returned", true);
+            }
+            else
+            {
+                _outputLogger.Write("Status: ");
+                _outputLogger.Write($"   No action needed: {status.NoActionNeeded}");
+                _outputLogger.Write($"   #Bytes: {status.NumBytes}");
+                _outputLogger.Write($"   #Conflicts: {status.NumConflicts}");
+                _outputLogger.Write($"   #Failures: {status.NumFailures}");
+                _outputLogger.Write($"   #Files: {status.NumFiles}");
+                _outputLogger.Write($"   #Operations: {status.NumOperations}");
+                _outputLogger.Write($"   #ResolvedConflicts: {status.NumResolvedConflicts}");
+                _outputLogger.Write($"   #Updated: {status.NumUpdated}");
+                _outputLogger.Write($"   #Warnings: {status.NumWarnings}");
+            }
         }
     }
 }

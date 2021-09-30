@@ -102,13 +102,13 @@ namespace Keyz
 
             if(_dte.Solution == null)
             {
-                _outputLogger.Write("No open solution");
+                _outputLogger.Write("No open solution", true);
             }
 
             var solutionPath = _dte.Solution?.FullName;
             if(string.IsNullOrEmpty(solutionPath))
             {
-                _outputLogger.Write("No open solution");
+                _outputLogger.Write("No open solution", true);
                 return;
             }
             string solutionDir = Path.GetDirectoryName(solutionPath);
