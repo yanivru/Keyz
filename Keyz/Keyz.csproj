@@ -45,13 +45,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="OpenOutputCommand.cs" />
     <Compile Include="OpenSolutionFolderCommand.cs" />
     <Compile Include="OutputWindowLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="KeyzPackage.cs" />
     <Compile Include="Shell.cs" />
-    <Compile Include="StartupProjectProvider.cs" />
     <Compile Include="TfsGetLatestCommand.cs" />
     <Compile Include="TfsService.cs" />
   </ItemGroup>
